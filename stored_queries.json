@@ -27,6 +27,164 @@
       ],
       "description": "Dump all assets in a specific resource group",
       "kql": "Resources | where (resourceGroup == ('<@resourcegroup@>')) | project name,id,type,location,subscriptionId,resourceGroup,tags, managedBy, sku,plan,properties,identity,tenantId | order by name | summarize count() by type"
+    },
+    {
+      "id": "4",
+      "tags": [
+        "storage",
+        "account"
+      ],
+      "description": "List all storage accounts in a resource group",
+      "kql": "Resources | where type =~ 'Microsoft.Storage/storageAccounts' and resourceGroup == ('<@resourcegroup@>') | project name, id, resourceGroup, location, sku, tags | order by name"
+    },
+    {
+      "id": "5",
+      "tags": [
+        "network",
+        "interface"
+      ],
+      "description": "List all network interfaces in a resource group",
+      "kql": "Resources | where type =~ 'Microsoft.Network/networkInterfaces' and resourceGroup == ('<@resourcegroup@>') | project name, id, resourceGroup, location, tags, properties.macAddress, properties.ipConfigurations | order by name"
+    },
+    {
+      "id": "6",
+      "tags": [
+        "security",
+        "group"
+      ],
+      "description": "List all security groups in a resource group",
+      "kql": "Resources | where type =~ 'Microsoft.Network/networkSecurityGroups' and resourceGroup == ('<@resourcegroup@>') | project name, id, resourceGroup, location, tags, properties.securityRules | order by name"
+    },
+    {
+      "id": "7",
+      "tags": [
+        "public ip",
+        "ip"
+      ],
+      "description": "Find Resource by PublicIP",
+      "kql": "where type contains 'publicIPAddresses' and properties.ipAddress =~ '<@ip@>'"
+    },
+    {
+      "id": "8",
+      "tags": [
+        "vm",
+        "all"
+      ],
+      "description": "Generate a list of all VM across Azure Subs",
+      "kql": "Resources | where type =~ 'Microsoft.Compute/virtualMachines' | project id, name, location, resourceGroup, properties.storageProfile.osDisk.osType | order by id desc"
+    },
+    {
+      "id": "9",
+      "tags": [
+        "RG",
+        "all",
+        "resource group"
+      ],
+      "description": "Dump all assets in a specific resource group",
+      "kql": "Resources | where (resourceGroup == ('<@resourcegroup@>')) | project name,id,type,location,subscriptionId,resourceGroup,tags, managedBy, sku,plan,properties,identity,tenantId | order by name | summarize count() by type"
+    },
+    {
+      "id": "10",
+      "tags": [
+        "azure website",
+        "all",
+        "website"
+      ],
+      "description": "Dump all Azure websites",
+      "kql": "Resources | where type == 'Microsoft.Web/sites' | project id, name, location, resourceGroup, properties.hostNames | order by name desc"
+    },
+    {
+      "id": "11",
+      "tags": [
+        "website",
+        "hostnames"
+      ],
+      "description": "Find all hostnames of an Azure website",
+      "kql": "Resources | where type == 'Microsoft.Web/sites' and name == '<@website_name@>' | extend hostnames=properties.hostNames | project hostnames"
+    },
+    {
+      "id": "12",
+      "tags": [
+        "website",
+        "owner"
+      ],
+      "description": "Find owner(s) of an Azure website",
+      "kql": "Resources | where type == 'Microsoft.Web/sites' and name == '<@website_name@>' | extend owners=tostring(tags.builtBy) | project owners"
+    },
+    {
+      "id": "13",
+      "tags": [
+        "azure websites",
+        "websites",
+        "hostnames"
+      ],
+      "description": "List all Azure websites and their hostnames",
+      "kql": "Resources | where type =~ 'Microsoft.Web/sites' | project id, name, resourceGroup, properties.hostNames | order by name"
+    },
+    {
+      "id": "14",
+      "tags": [
+        "azure website",
+        "website",
+        "details"
+      ],
+      "description": "List all details for a specific Azure website",
+      "kql": "Resources | where type =~ 'Microsoft.Web/sites' and name == '<@websiteName@>' | project id, name, resourceGroup, location, properties.* | order by name"
+    },
+    {
+      "id": "15",
+      "tags": [
+        "network security group",
+        "nsg",
+        "rules"
+      ],
+      "description": "List all rules for a specific Network Security Group",
+      "kql": "Resources | where type == 'Microsoft.Network/networkSecurityGroups' and name == '<@nsgName@>' | project id, name, resourceGroup, properties.securityRules.* | order by properties.securityRules.priority"
+    },
+    {
+      "id": "16",
+      "tags": [
+        "subnet",
+        "details"
+      ],
+      "description": "List all details for a specific subnet",
+      "kql": "Resources | where type == 'Microsoft.Network/virtualNetworks/subnets' and name == '<@subnetName@>' | project id, name, resourceGroup, location, properties.* | order by name"
+    },
+    {
+      "id": "17",
+      "tags": [
+        "owners",
+        "details"
+      ],
+      "description": "List all resources and their owners in a specific resource group",
+      "kql": "Resources | where (resourceGroup == ('<@resourcegroup@>')) | project name,id,type,location,subscriptionId,resourceGroup,tags, managedBy, properties.managedBy | order by managedBy"
+    },
+    {
+      "id": "18",
+      "tags": [
+        "web app",
+        "azure websites"
+      ],
+      "description": "List all Azure Web Apps with details",
+      "kql": "Resources | where type =~ 'Microsoft.Web/sites' | project name, id, type, location, resourceGroup, properties.enabled | order by name"
+    },
+    {
+      "id": "19",
+      "tags": [
+        "hostname",
+        "web app"
+      ],
+      "description": "List all hostnames for an Azure Web App",
+      "kql": "Resources | where type =~ 'Microsoft.Web/sites/hostnames' and resourceGroup == ('<@resourcegroup@>') | project name, id, type, hostName, resourceGroup, properties.customHostNames | order by hostName"
+    },
+    {
+      "id": "20",
+      "tags": [
+        "owner",
+        "azure assets"
+      ],
+      "description": "List all Azure assets and their owners",
+      "kql": "Resources | project name, id, type, resourceGroup, managedBy, owner, tags | where isnotnull(owner) | order by owner"
     }
   ]
 }
